@@ -1,0 +1,151 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html{
+  margin:    0 auto;
+  max-width: 90%;
+}
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}
+
+.logo{
+  width: 50px;
+  border-radius: 50%;
+  padding-right: 5px;
+}
+
+.navbar{
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 20px;
+}
+
+.titlu{
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+.stitlu{ 
+  padding-bottom: 20px;
+  position: relative;
+  left: 40px;
+  text-decoration: underline;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding-top: 10px;
+  min-height: 500px;
+}
+
+.container>form{
+  display: grid;
+  grid-template-columns:1fr 1fr;
+  gap: 10px;
+}
+
+.form-group:last-of-type{
+  grid-column: span 2;
+}
+
+.form-label{
+  padding-left: 5px;
+}
+
+.container>h1{
+  padding: 20px;
+}
+
+.workers{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  align-content: center;
+  padding-bottom: 20px;
+}
+
+.card{
+  height: 100%;
+}
+
+.card-header{
+  height:40%;
+  display: table;
+}
+
+.card-header>h2{
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  
+}
+
+.card-btn{
+  padding: 0px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.filtre{
+  margin-bottom: 20px;
+}
+
+.reset-btn{
+  margin-bottom: 20px;
+}
+
+.modal-body{
+  margin: 1rem 1rem;
+}
+
+.worker-details{
+  display: grid;
+  grid-template-columns: 100px 1fr;
+}
+
+.worker-btn{
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 700px) {
+  .workers{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    align-content: center;
+  }
+
+.container>form{
+  display: flex;
+  flex-direction: column;
+}
+  .container>.form-group{
+    display: grid;
+    grid-template-columns: 200px 1fr;
+  }
+  .add-btn{
+    width: 200px;
+    margin-bottom: 50px;
+    align-self: flex-end;
+  }
+  
+}
+@media screen and (min-width: 1000px) {
+  .workers{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+    align-content: center;
+  
+  }
+}
