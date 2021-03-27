@@ -59,7 +59,7 @@ export default function Add() {
                     location: values.location,
                     phoneNumber: values.phoneNumber,
                     description: values.description,
-                    rating: values.rating,
+                    rating: 2.5,
                     date: date,
                     time: time,
                 })
@@ -151,9 +151,6 @@ export default function Add() {
                             <label className="form-label"> Descriere</label> 
                             <textarea className="form-control form-description" {...bindInput('description')} placeholder="Descriere" rows="5"> </textarea>
                         </div>
-                        <div className="form-group">
-                            <input className="form-control form-rating" {...bindInput('rating')} placeholder="Rating" value="2.5"/>
-                        </div>
                     <button className="btn btn-primary add-btn" onClick={handleAdd}>Adaugare</button>
                 </form>
 
@@ -192,7 +189,7 @@ function dataIsValid(values) {
 }
 
 function checkPhoneNumber(val) {
-    var mob=/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+    var mob=/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s./0-9]*$/g;
     if (mob.test(val) === false) {
         return false;
     }

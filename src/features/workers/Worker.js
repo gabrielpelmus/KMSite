@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
+import React,{ useContext } from 'react';
 import ReactStars from "react-rating-stars-component";
 import { Modal } from '../../components/Modal/Modal.js';
+import { AuthContext } from '../auth/AuthContext.js';
 import { useModal } from '../../components/Modal/useModal.js';
 import * as firebase from 'firebase/app';
 
 export default function Worker({ worker, dismissModal, showDelete = false }) {
+    const { isAuthenticated } = useContext(AuthContext);
     const { modalProps, openModal } = useModal();
     const styling = {
         size: 30,
-        value: 2.5,
         isHalf: true,
-        //emptyIcon: <i className="far fa-star" />,
-        //halfIcon: <i className="fa fa-star-half-alt" />,
-        //filledIcon: <i className="fa fa-star" />,
-        edit: true,
         onChange: newValue => {
             console.log(`The new value is ${newValue}`);
-          }
+        } 
     };
 
     function showDetails() {
@@ -81,7 +78,7 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                         <label className=""> Descriere: </label> {worker.description}
                     </div>
                     <div id="rating">
-                        <label>Rating: </label> <ReactStars {...styling} />
+                        <label>Rating: </label> <ReactStars {...styling} value={worker.rating} edit={isAuthenticated}/>
                     </div>
                 </Modal>
             </React.Fragment>
