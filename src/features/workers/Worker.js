@@ -87,12 +87,35 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                 date: date,
                 time: time,
             })
+            .then(() => {handleRatingUpdate() })
             .then(() => { showAddedWorked() } )
-            .then(() => [] )
+            .then(() => [] );
                             
         } catch(error) {
             console.warn("Error adding review: ", error);
         };
+    }
+
+    async function handleRatingUpdate() {
+        var updatedRating = 0;
+        reviews.forEach(function (rev){
+            updatedRating += rev.rating;
+        });
+
+        updatedRating = updatedRating/reviews.length;
+
+        db.collection("workersCollection")
+        .onSnapshot(documents => {
+            documents.forEach(document => {
+                if(document.data().workerid === worker.workerid){
+                    db.collection("workersCollection").doc(document.id).update({
+                        rating: updatedRating
+                    })
+                }
+            })
+        });
+
+        workerRating = updatedRating;
     }
 
     async function handleDelete() {
@@ -151,23 +174,20 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                     <div id="worker-rating">
                         <label>Rating: </label> <ReactStars {...styling} value={workerRating}/>
                     </div>
-                    <div id="worker-review">
-                        <label>Reviews:</label>
-                        <div> {reviews.map( rev => {return <p className="review-line"><em>{rev.review} - <b>{rev.rating}/5</b></em>☆</p>})}</div>
-                        
-                    </div>
-
                     { isAuthenticated ?
                         <form onSubmit={handleSubmit} autoComplete="off" > 
                             <div id="worker-review">
                                 <label>Recenzie: </label>
-                                {/* <textarea className="form-control form-description" {...bindInput('review')} placeholder="Recenzie" rows="5" disabled={!isEditable}> </textarea> */}
-                                <textarea id="worker-review" className="form-control form-review" placeholder="Recenzie" rows="5" onChange={updateReviewValue} disabled={!isEditable} defaultValue={workerReview}/>
-                                {/* <button className="btn btn-primary worker-btn" onClick={handleReview} disabled={!isEditable}>Adaugă recenzie</button> */}
+                                <textarea id="review" className="form-control form-review" placeholder="Recenzie" rows="5" onChange={updateReviewValue} disabled={!isEditable} defaultValue={workerReview}/>
                                 <button className="btn btn-primary worker-btn" disabled={!isEditable}>Adaugă recenzie</button>
                             </div>
                         </form> : null
                     }
+                    <div id="worker-reviews">
+                        <label>Reviews:</label>
+                        <div> {reviews.map( rev => {return <p className="review-line"><em>{rev.review} - <b>{rev.rating}/5</b></em>☆</p>})}</div>
+                        
+                    </div>
                 </Modal>
             </React.Fragment>
         </div>
