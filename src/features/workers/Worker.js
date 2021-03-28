@@ -9,6 +9,7 @@ import * as firebase from 'firebase/app';
 export default function Worker({ worker, dismissModal, showDelete = false }) {
     const initialFormValues = {value: ''};
     const [ , setItem ] = useState(initialFormValues);
+    const [ reviews, setReview] = useState([]);
     const { isAuthenticated } = useContext(AuthContext);
     const { user } = useContext(AuthContext);
     //const { values, bindInput } = useForm(initialFormValues);
@@ -48,6 +49,14 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
             openModal();
         }
     }
+
+    useEffect(() => {
+       db.collection("reviewsCollection")
+            .where("workerid","==", worker.workerid)
+            .onSnapshot( snapshot =>{
+              setReview(snapshot.docs.map(doc => doc.data()));
+            });  
+    }, [] );
 
     // function resetValue() {
     //     values.review = "";
@@ -141,6 +150,11 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                     </div>
                     <div id="worker-rating">
                         <label>Rating: </label> <ReactStars {...styling} value={workerRating}/>
+                    </div>
+                    <div id="worker-review">
+                        <label>Reviews:</label>
+                        <div> {reviews.map( rev => {return <p className="review-line"><em>{rev.review} - <b>{rev.rating}/5</b></em>☆</p>})}</div>
+                        
                     </div>
 
                     { isAuthenticated ?
