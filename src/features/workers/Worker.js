@@ -3,7 +3,6 @@ import ReactStars from "react-rating-stars-component";
 import { Modal } from '../../components/Modal/Modal.js';
 import { AuthContext } from '../auth/AuthContext.js';
 import { useModal } from '../../components/Modal/useModal.js';
-import { useForm } from '../../hooks';
 import * as firebase from 'firebase/app';
 
 export default function Worker({ worker, dismissModal, showDelete = false }) {
@@ -56,7 +55,7 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
             .onSnapshot( snapshot =>{
               setReview(snapshot.docs.map(doc => doc.data()));
             });  
-    }, [] );
+    }, [db, worker.workerid] );
 
     // function resetValue() {
     //     values.review = "";
@@ -76,10 +75,11 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
         e.preventDefault();
         
         try {
-            const time = new Date().getHours() + ":" +  new Date().getMinutes();
+            const time = new Date().getUTCMilliseconds();
             const date = new Date().toJSON().slice(0,10).replace(/-/g,'/');
             
             await db.collection("reviewsCollection").add({   
+                id: Math.random() + time,
                 user: user.uid,
                 workerid:  worker.workerid,
                 review: workerReview,
@@ -90,7 +90,7 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
             .then(() => {handleRatingUpdate() })
             .then(() => { showAddedWorked() } )
             .then(() => [] );
-                            
+            //e.target[0].value = "";
         } catch(error) {
             console.warn("Error adding review: ", error);
         };
@@ -185,7 +185,7 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                     }
                     <div id="worker-reviews">
                         <label>Reviews:</label>
-                        <div> {reviews.map( rev => {return <p className="review-line"><em>{rev.review} - <b>{rev.rating}/5</b></em>☆</p>})}</div>
+                        <div> {reviews.map( rev => {return <p key={rev.time} className="review-line"><em>{rev.review} - <b>{rev.rating}/5</b></em>☆</p>})}</div>
                         
                     </div>
                 </Modal>
