@@ -11,7 +11,7 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
     const [ , setItem ] = useState(initialFormValues);
     const { isAuthenticated } = useContext(AuthContext);
     const { user } = useContext(AuthContext);
-    const { values, bindInput } = useForm(initialFormValues);
+    //const { values, bindInput } = useForm(initialFormValues);
     const { modalProps, openModal } = useModal();
     var isEditable = isAuthenticated;
     const styling = {
@@ -47,13 +47,13 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
         }
     }
 
-    function resetValue() {
-        values.review = "";
-        values.rating = 0;
-    }
+    // function resetValue() {
+    //     values.review = "";
+    //     values.rating = 0;
+    // }
 
     function showAddedWorked(){
-        resetValue();
+        //resetValue();
         isEditable = false;
     }
 
@@ -67,8 +67,8 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
             await db.collection("reviewsCollection").add({   
                 user: user.uid,
                 workerid:  worker.id,
-                review: values.review,
-                rating: values.rating,
+                //review: values.review,
+                //rating: values.rating,
                 date: date,
                 time: time,
             })
@@ -140,7 +140,8 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                     { isAuthenticated ?
                         <div id="worker-review">
                             <label>Recenzie: </label>
-                            <textarea className="form-control form-description" {...bindInput('review')} placeholder="Recenzie" rows="5" disabled={!isEditable}> </textarea>
+                            {/* <textarea className="form-control form-description" {...bindInput('review')} placeholder="Recenzie" rows="5" disabled={!isEditable}> </textarea> */}
+                            <textarea className="form-control form-description" placeholder="Recenzie" rows="5" disabled={!isEditable}/>
                             { <button className="btn btn-primary worker-btn" onClick={handleReview} disabled={!isEditable}>Adaugă recenzie</button> }
                         </div> : null
                     }
