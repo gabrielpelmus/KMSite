@@ -14,12 +14,14 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
     //const { values, bindInput } = useForm(initialFormValues);
     const { modalProps, openModal } = useModal();
     var isEditable = isAuthenticated;
+    var workerRating = worker.rating;
+    var workerReview = "";
     const styling = {
         size: 30,
         isHalf: true,
         edit: isEditable,
         onChange: newValue => {
-            console.log(`The new value is ${newValue}`);
+            workerRating = newValue;
         } 
     };
 
@@ -57,7 +59,11 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
         isEditable = false;
     }
 
-    async function handleReview(e) {
+    function updateReviewValue(e){
+        workerReview = e.target.value;
+    }
+
+    async function handleSubmit(e) {
         e.preventDefault();
         
         try {
@@ -66,9 +72,9 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
             
             await db.collection("reviewsCollection").add({   
                 user: user.uid,
-                workerid:  worker.id,
-                //review: values.review,
-                //rating: values.rating,
+                workerid:  worker.workerid,
+                review: workerReview,
+                rating: workerRating,
                 date: date,
                 time: time,
             })
@@ -134,16 +140,19 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                         <label className=""> Descriere: </label> {worker.description}
                     </div>
                     <div id="worker-rating">
-                        <label>Rating: </label> <ReactStars {...styling} value={worker.rating}/>
+                        <label>Rating: </label> <ReactStars {...styling} value={workerRating}/>
                     </div>
 
                     { isAuthenticated ?
-                        <div id="worker-review">
-                            <label>Recenzie: </label>
-                            {/* <textarea className="form-control form-description" {...bindInput('review')} placeholder="Recenzie" rows="5" disabled={!isEditable}> </textarea> */}
-                            <textarea className="form-control form-description" placeholder="Recenzie" rows="5" disabled={!isEditable}/>
-                            { <button className="btn btn-primary worker-btn" onClick={handleReview} disabled={!isEditable}>Adaugă recenzie</button> }
-                        </div> : null
+                        <form onSubmit={handleSubmit} autoComplete="off" > 
+                            <div id="worker-review">
+                                <label>Recenzie: </label>
+                                {/* <textarea className="form-control form-description" {...bindInput('review')} placeholder="Recenzie" rows="5" disabled={!isEditable}> </textarea> */}
+                                <textarea id="worker-review" className="form-control form-review" placeholder="Recenzie" rows="5" onChange={updateReviewValue} disabled={!isEditable} defaultValue={workerReview}/>
+                                {/* <button className="btn btn-primary worker-btn" onClick={handleReview} disabled={!isEditable}>Adaugă recenzie</button> */}
+                                <button className="btn btn-primary worker-btn" disabled={!isEditable}>Adaugă recenzie</button>
+                            </div>
+                        </form> : null
                     }
                 </Modal>
             </React.Fragment>
