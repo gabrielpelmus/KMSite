@@ -81,6 +81,7 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
             await db.collection("reviewsCollection").add({   
                 id: Math.random() + time,
                 user: user.uid,
+                userName: user.displayName,
                 workerid:  worker.workerid,
                 review: workerReview,
                 rating: workerRating,
@@ -185,8 +186,7 @@ export default function Worker({ worker, dismissModal, showDelete = false }) {
                     }
                     <div id="worker-reviews">
                         <label>Reviews:</label>
-                        <div> {reviews.map( rev => {return <p key={rev.time} className="review-line"><em>{rev.review} - <b>{rev.rating}/5</b></em>☆</p>})}</div>
-                        
+                        <div> {reviews.map( rev => {return <p key={rev.time} className="review-line"><em>{rev.userName != null? rev.userName: "Anonim"}: {rev.review} - <b>{rev.rating}/5</b></em>☆</p>})}</div>
                     </div>
                 </Modal>
             </React.Fragment>
